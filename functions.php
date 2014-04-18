@@ -806,4 +806,22 @@ echo '<link rel="shortcut icon" href="' . site_url() . '/favicon.ico" type="imag
 }
 add_action('wp_head', 'wpforge_favicon', 0);
 
+/**
+ * Insert Images with Figure/Figcaption
+ * @see http://css-tricks.com/snippets/wordpress/insert-images-with-figurefigcaption/
+ * 
+ * @since WP-Forge 5.2.2.1
+ */
+function html5_insert_image($html, $id, $caption, $title, $align, $url, $size, $alt) {    
+    $src = wp_get_attachment_image_src( $id, $size, false );
+    $html5 = "<figure class='align$align'><a href='$url'>";
+    $html5 .= "<img src='$src[0]' alt='$alt' />";
+    if ($caption) {
+    $html5 .= "<figcaption>$caption</figcaption>";
+    }
+    $html5 .= "</a></figure>";
+    return $html5;
+    }
+add_filter( 'image_send_to_editor', 'html5_insert_image', 10, 9 );
+
 ?>
