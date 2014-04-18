@@ -806,4 +806,25 @@ echo '<link rel="shortcut icon" href="' . site_url() . '/favicon.ico" type="imag
 }
 add_action('wp_head', 'wpforge_favicon', 0);
 
+// Add custom image size to Foundation interchange for responsive images
+
+add_image_size('small-img', 640, 9999);
+add_image_size('medium-img', 1020, 9999);
+add_image_size('large-img', 1440, 9999);
+
+// Interchange post thumbnail for responsive images
+if ( ! function_exists( 'interchange_post_thumbnail' ) ) :
+
+function interchange_post_thumbnail() {
+	if ( has_post_thumbnail() )  
+	$thumb_id = get_post_thumbnail_id();
+	$thumb_url_small = wp_get_attachment_image_src($thumb_id,'small-img', true);
+	$thumb_url_medium = wp_get_attachment_image_src($thumb_id,'medium-img', true);
+	$thumb_url_large = wp_get_attachment_image_src($thumb_id,'large-img', true);
+
+	echo '<img data-interchange="[' . $thumb_url_small[0] . ', (small)], [' . $thumb_url_medium[0] . ', (medium)] [' . $thumb_url_large[0] . ', (large)]"';	 
+
+	}
+endif;
+
 ?>
